@@ -1,0 +1,30 @@
+# Text Mining with R
+__A Tidy approach (2017-05-07)__
+
+* See book [Text Mining with R](http://tidytextmining.com/)  
+
+* Rmarkdown reference guide [here](https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf)  
+
+
+__Summary Chapter 1:__
+In this chapter, we explored what we mean by tidy data when it comes to text, and how tidy data principles can be applied to __natural language processing__. When text is organized in a format with __one token per row__, tasks like removing stop words or calculating word frequencies are natural applications of familiar operations within the tidy tool ecosystem. The one-token-per-row framework can be __extended from single words to n-grams__ and other meaningful units of text, as well as to many other analysis priorities that we will consider in this book.
+
+
+* read20News.R --> Read the data from 20News
+
+## Data
+* Data are available [here](http://qwone.com/~jason/20Newsgroups/)
+* Contains ~ 20K newsgroup documents partionated nearly evenly across 20 different newsgroups
+* Popular for text classification and text clustering  
+
+
+
+##### Example of equation using latex math symbol style
+$$E- mc^{2} $$
+
+
+##### Example of code
+
+``` {r}
+Sys.Date()
+```
