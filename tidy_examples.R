@@ -146,16 +146,21 @@ tidy_danish_freq <- tidy_danish %>%
 
 ############# Norwegian
 norw_guten_meta <- gutenberg_metadata %>% filter(language == "no")
-norwegian_books <- gutenberg_download(norw_guten_meta$gutenberg_id, )
+norwegian_books <- gutenberg_download(norw_guten_meta$gutenberg_id) %>%
+  mutate(latin1 = iconv(text, to = "latin1"))
+
+# Encoding
+test <- norwegian_books %>% mutate(test = iconv(text, to = "latin1"))
 
 # Word frequencies
 tidy_norw <- norwegian_books %>%
-  unnest_tokens(word, text)
+  unnest_tokens(word, latin1)
 
 # Remove stopwords
 
-tidy_norw <- anti_join(tidy_norw, data_frame(word = stopwords(kind = "no")))
+tidy_norw <- anti_join(tidy_norw, data_frame(word = c(stopwords(kind = "no"), stopwords(kind = "da"))))
 
+# (this list is not sufficient for 'old' stopwords, like 'paa')
 tidy_norw_freq <- tidy_norw %>%
   count(word, sort = TRUE)
 
@@ -163,6 +168,18 @@ tidy_norw_freq <- tidy_norw %>%
 library(wordcloud)
 
 tidy_norw %>%
-  anti_join(data_frame(word = stopwords(kind = "da")))
+  anti_join(data_frame(word = stopwords(kind = "da"))) %>%
   count(word) %>%
   with(wordcloud(word, n, max.words = 100))
+
+
+################### Alternative to unnest_tokens() --> split with regex
+austen_chapters <- austen_books() %>%
+  group_by(book) %>%
+  unnest_tokens(chapter, text, token = "regex", 
+                pattern = "Chapter|CHAPTER [\\dIVXLC]") %>%
+  ungroup()
+
+austen_chapters %>% 
+  group_by(book) %>% 
+  summarise(chapters = n())
