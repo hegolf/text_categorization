@@ -18,6 +18,12 @@ In this chapter, we explored what we mean by tidy data when it comes to text, an
 * Popular for text classification and text clustering  
 
 
+## TODO:
+* Handle æøå
+* Check stemmer and quality of stemmer
+
+
+
 
 ##### Example of equation using latex math symbol style
 $$E- mc^{2} $$
