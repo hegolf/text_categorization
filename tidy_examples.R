@@ -76,7 +76,6 @@ tidy_books %>%
 
 ################### GUTENBERG
 # 1.4
-
 library(gutenbergr)
 hgwells <- gutenberg_download(gutenberg_id = c(35, 36, 5230, 159)) # col: id, text
 
@@ -124,3 +123,46 @@ ggplot(frequency, aes(x = proportion, y = `Jane Austen`, color = abs(`Jane Auste
   facet_wrap(~author, ncol = 2) +
   theme(legend.position="none") +
   labs(y = "Jane Austen", x = NULL)
+
+
+############## More Gutenberg #############
+# https://ropensci.org/tutorials/gutenbergr_tutorial/
+# Gutenberg metadata --> contain various info about the datasets
+
+danish_guten_meta <- gutenberg_metadata %>% filter(language == "da")
+danish_books <- gutenberg_download(danish_guten_meta$gutenberg_id)
+
+# Word frequencies
+tidy_danish <- danish_books %>%
+  unnest_tokens(word, text)
+
+# Remove stopwords
+library(tm)
+
+tidy_danish <- anti_join(tidy_danish, data_frame(word = stopwords(kind = "da")))
+
+tidy_danish_freq <- tidy_danish %>%
+  count(word, sort = TRUE)
+
+############# Norwegian
+norw_guten_meta <- gutenberg_metadata %>% filter(language == "no")
+norwegian_books <- gutenberg_download(norw_guten_meta$gutenberg_id, )
+
+# Word frequencies
+tidy_norw <- norwegian_books %>%
+  unnest_tokens(word, text)
+
+# Remove stopwords
+
+tidy_norw <- anti_join(tidy_norw, data_frame(word = stopwords(kind = "no")))
+
+tidy_norw_freq <- tidy_norw %>%
+  count(word, sort = TRUE)
+
+######## Wordcloud
+library(wordcloud)
+
+tidy_norw %>%
+  anti_join(data_frame(word = stopwords(kind = "da")))
+  count(word) %>%
+  with(wordcloud(word, n, max.words = 100))
